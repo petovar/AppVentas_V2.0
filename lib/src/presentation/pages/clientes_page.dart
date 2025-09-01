@@ -1,9 +1,10 @@
+import 'package:app_ventas/src/customs/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
-// import '../../customs/constants.dart';
 import '../../models/cliente_model.dart';
 import '../../providers/cliente_provider.dart';
+// import '../../customs/constants.dart';
 // import 'cliente_provider.dart';
 // import 'cliente.dart';
 
@@ -59,10 +60,8 @@ class _ClientesPageState extends State<ClientesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Lista de Clientes'),
-        backgroundColor: Colors.teal,
-      ),
+      backgroundColor: Constants.colorBackgroundScafold,
+      appBar: AppBar(title: const Text('Lista de Clientes')),
       body: Column(
         children: [
           Padding(
@@ -188,8 +187,8 @@ class _ClientesPageState extends State<ClientesPage> {
         onPressed: () {
           _showAddClienteDialog(context);
         },
-        backgroundColor: Colors.teal,
-        child: const Icon(Icons.add, color: Colors.white),
+
+        child: const Icon(Icons.person_add, color: Colors.white),
       ),
     );
   }
@@ -214,15 +213,18 @@ class _ClientesPageState extends State<ClientesPage> {
                   controller: nameController,
                   decoration: const InputDecoration(labelText: 'Nombre'),
                 ),
+                const SizedBox(height: 10),
                 TextField(
                   controller: aliasController,
                   decoration: const InputDecoration(labelText: 'Alias'),
                 ),
+                const SizedBox(height: 10),
                 TextField(
                   controller: telController,
                   decoration: const InputDecoration(labelText: 'Teléfono'),
                   keyboardType: TextInputType.phone,
                 ),
+                const SizedBox(height: 10),
                 TextField(
                   controller: emailController,
                   decoration: const InputDecoration(
@@ -230,10 +232,12 @@ class _ClientesPageState extends State<ClientesPage> {
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
+                const SizedBox(height: 10),
                 TextField(
                   controller: dirController,
                   decoration: const InputDecoration(labelText: 'Dirección'),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -298,15 +302,18 @@ class _ClientesPageState extends State<ClientesPage> {
                   controller: nameController,
                   decoration: const InputDecoration(labelText: 'Nombre'),
                 ),
+                const SizedBox(height: 10),
                 TextField(
                   controller: aliasController,
                   decoration: const InputDecoration(labelText: 'Alias'),
                 ),
+                const SizedBox(height: 10),
                 TextField(
                   controller: telController,
                   decoration: const InputDecoration(labelText: 'Teléfono'),
                   keyboardType: TextInputType.phone,
                 ),
+                const SizedBox(height: 10),
                 TextField(
                   controller: emailController,
                   decoration: const InputDecoration(
@@ -314,10 +321,12 @@ class _ClientesPageState extends State<ClientesPage> {
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
+                const SizedBox(height: 10),
                 TextField(
                   controller: dirController,
                   decoration: const InputDecoration(labelText: 'Dirección'),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -342,7 +351,7 @@ class _ClientesPageState extends State<ClientesPage> {
                 ).updateCliente(updatedCliente);
                 Navigator.of(context).pop();
               },
-              child: const Text('Guardar Cambios'),
+              child: const Text('Actualizar'),
             ),
           ],
         );

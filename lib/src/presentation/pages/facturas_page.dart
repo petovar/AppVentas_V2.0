@@ -1,3 +1,4 @@
+import 'package:app_ventas/src/customs/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -235,6 +236,71 @@ class _FacturaPageState extends State<FacturaPage> {
     );
   }
 
+  void _showFacturaReceipt(Venta venta, List<DetalleVenta> detalles) {
+    final total = detalles.fold(0.0, (sum, item) => sum + item.total);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Recibo de Factura', textAlign: TextAlign.center),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Divider(),
+                Text('Cliente: ${venta.nombre}'),
+                Text('Fecha: ${venta.fecha.substring(0, 10)}'),
+                const Divider(),
+                const Text('Productos:'),
+                ...detalles.map(
+                  (item) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${item.cantidad.toStringAsFixed(0)} x ${item.descripcion}',
+                          ),
+                        ),
+                        Text('\$${item.total.toStringAsFixed(2)}'),
+                      ],
+                    ),
+                  ),
+                ),
+                const Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Total:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '\$${total.toStringAsFixed(2)}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                const Divider(),
+                Text('Condición: ${venta.condicion}'),
+                if (venta.condicion == 'Contado')
+                  Text('Método de Pago: $_metodoPago'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cerrar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _printFactura() {
     // Aquí iría la lógica para enviar la factura a la impresora térmica.
     // Esto es un ejemplo, la implementación real dependería de la librería y el
@@ -305,6 +371,7 @@ class _FacturaPageState extends State<FacturaPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Factura guardada correctamente.')),
       );
+      _showFacturaReceipt(venta, detallesFinal);
       // Limpiar la página para una nueva factura
       setState(() {
         _selectedClient = null;
@@ -320,9 +387,10 @@ class _FacturaPageState extends State<FacturaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Constants.colorBackgroundScafold,
       appBar: AppBar(
         title: const Text('Nueva Factura'),
-        backgroundColor: Colors.teal,
+        // backgroundColor: Colors.teal,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -334,6 +402,7 @@ class _FacturaPageState extends State<FacturaPage> {
               'Cliente',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
+            SizedBox(height: 10.0),
             GestureDetector(
               onTap: _showClientSearchDialog,
               child: AbsorbPointer(
@@ -356,6 +425,7 @@ class _FacturaPageState extends State<FacturaPage> {
               'Productos',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
+            SizedBox(height: 10.0),
             ..._facturaItems.asMap().entries.map((entry) {
               int idx = entry.key;
               DetalleVenta item = entry.value;
@@ -416,6 +486,7 @@ class _FacturaPageState extends State<FacturaPage> {
               'Condición de Pago',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
+            SizedBox(height: 10.0),
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(
                 labelText: 'Condición',
@@ -444,6 +515,7 @@ class _FacturaPageState extends State<FacturaPage> {
                 'Método de Pago',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
+              SizedBox(height: 10.0),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
                   labelText: 'Método',

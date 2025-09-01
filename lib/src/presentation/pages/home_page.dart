@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:app_ventas/src/presentation/pages/facturas_page.dart';
 import 'package:app_ventas/src/presentation/pages/productos_page.dart';
 
 import 'clientes_page.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/material.dart';
 import '../widgets/round_button.dart';
 import 'prov_page.dart';
 import 'recibos_tickets.dart';
-import 'ventas_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -75,17 +75,17 @@ class HomePage extends StatelessWidget {
           children: [
             RoundedButton(
               color: Colors.white,
-              icon: Icons.category_outlined,
-              texto: 'Inventario',
-              route: '/inventario',
+              icon: Icons.shopping_cart_checkout,
+              texto: 'Ventas',
+              route: '/ventas',
               context: context,
               enabledBoton: true,
             ),
             RoundedButton(
               color: Colors.white,
-              icon: Icons.shopping_cart_checkout,
-              texto: 'Ventas',
-              route: '/ventas',
+              icon: Icons.category_outlined,
+              texto: 'Inventario',
+              route: '/inventario',
               context: context,
               enabledBoton: true,
             ),
@@ -159,24 +159,24 @@ Drawer _getDrawer(BuildContext context) {
           },
         ),
         ListTile(
-          leading: Icon(Icons.category),
-          title: const Text('Inventario'),
+          leading: Icon(Icons.shopping_cart_checkout),
+          title: const Text('Ventas'),
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ProductosPage()),
+              MaterialPageRoute(builder: (context) => const FacturaPage()),
             ).then((onValue) {
               if (context.mounted) Navigator.of(context).pop();
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.shopping_cart_checkout),
-          title: const Text('Ventas'),
+          leading: Icon(Icons.category),
+          title: const Text('Inventario'),
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const VentasPage()),
+              MaterialPageRoute(builder: (context) => const ProductosPage()),
             ).then((onValue) {
               if (context.mounted) Navigator.of(context).pop();
             });
