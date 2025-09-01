@@ -5,6 +5,9 @@ class ProveedoresPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text("Proveedores")));
+    return Scaffold(
+      appBar: AppBar(title: Text("Proveedores")),
+      body: Center(child: Text("EN DESARROLLO ...")),
+    );
   }
 }

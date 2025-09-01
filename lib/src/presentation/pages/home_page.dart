@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:app_ventas/src/presentation/pages/facturas_page.dart';
 import 'package:app_ventas/src/presentation/pages/productos_page.dart';
+import 'package:app_ventas/src/presentation/pages/ventas_sumary_page.dart';
 
 import 'clientes_page.dart';
 import 'compras_page.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/material.dart';
 
 import '../widgets/round_button.dart';
 import 'prov_page.dart';
-import 'recibos_tickets.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -104,8 +104,8 @@ class HomePage extends StatelessWidget {
             RoundedButton(
               color: Colors.white,
               icon: Icons.receipt,
-              texto: 'Recibos/Tickets',
-              route: '/recibos',
+              texto: 'Resumen Ventas',
+              route: '/ResumenVentas',
               context: context,
               enabledBoton: true,
             ),
@@ -196,11 +196,13 @@ Drawer _getDrawer(BuildContext context) {
         ),
         ListTile(
           leading: Icon(Icons.receipt),
-          title: const Text('Recibos'),
+          title: const Text('Resumen Ventas'),
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const RecibosPage()),
+              MaterialPageRoute(
+                builder: (context) => const VentasSummaryPage(),
+              ),
             ).then((onValue) {
               if (context.mounted) Navigator.of(context).pop();
             });

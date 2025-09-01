@@ -1,11 +1,11 @@
 import 'package:app_ventas/src/presentation/pages/facturas_page.dart';
 import 'package:app_ventas/src/presentation/pages/productos_page.dart';
+import 'package:app_ventas/src/presentation/pages/ventas_sumary_page.dart';
 import 'package:provider/provider.dart';
 
 import 'presentation/pages/clientes_page.dart';
 import 'presentation/pages/compras_page.dart';
 import 'presentation/pages/prov_page.dart';
-import 'presentation/pages/recibos_tickets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -74,7 +74,7 @@ class App extends StatelessWidget {
                 '/inventario': (BuildContext context) => ProductosPage(),
                 '/ventas': (BuildContext context) => FacturaPage(),
                 '/clientes': (BuildContext context) => ClientesPage(),
-                '/recibos': (BuildContext context) => RecibosPage(),
+                '/ResumenVentas': (BuildContext context) => VentasSummaryPage(),
                 '/compras': (BuildContext context) => ComprasPage(),
                 '/proveedores': (BuildContext context) => ProveedoresPage(),
               },
