@@ -1,3 +1,4 @@
+import 'package:app_ventas/src/customs/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/factura_provider.dart';
@@ -129,6 +130,7 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
             : null;
 
     return Scaffold(
+      backgroundColor: Constants.colorBackgroundScafold,
       appBar: AppBar(
         title: const Text('Resumen de Ventas'),
         // backgroundColor: Colors.teal,
@@ -280,7 +282,7 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       // Tarjeta de Ventas por Condición
                       Card(
                         elevation: 4,

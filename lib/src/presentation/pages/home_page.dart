@@ -16,9 +16,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String appVersion = '1.0';
     return Scaffold(
       appBar: AppBar(title: Text("Mi negocio")),
-      drawer: _getDrawer(context),
+      drawer: _getDrawer(context, appVersion),
       body: Stack(children: [_fondoApp(), _crearBotones(context)]),
     );
   }
@@ -132,7 +133,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-Drawer _getDrawer(BuildContext context) {
+Drawer _getDrawer(BuildContext context, String version) {
   return Drawer(
     // Add a ListView to the drawer. This ensures the user can scroll
     // through the options in the drawer if there isn't enough vertical
@@ -231,6 +232,15 @@ Drawer _getDrawer(BuildContext context) {
               if (context.mounted) Navigator.of(context).pop();
             });
           },
+        ),
+        Flexible(flex: 1, child: SizedBox(height: 100)),
+        const Divider(), // Línea divisoria
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Versión: $version',
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
+          ),
         ),
       ],
     ),

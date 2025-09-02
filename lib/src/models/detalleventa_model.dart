@@ -55,4 +55,31 @@ class DetalleVenta {
       'updated_at': updatedAt,
     };
   }
+
+  // Método de utilidad para crear una copia del objeto con valores actualizados.
+  DetalleVenta copyWith({
+    String? idVenta,
+    String? idProducto,
+    String? descripcion,
+    String? unidad,
+    double? cantidad,
+    double? precio,
+    double? total,
+    double? orden,
+    String? createdAt,
+    String? updateAt,
+  }) {
+    return DetalleVenta(
+      idVenta: idVenta ?? this.idVenta,
+      idProducto: idProducto ?? this.idProducto,
+      descripcion: descripcion ?? this.descripcion,
+      unidad: unidad ?? this.unidad,
+      cantidad: cantidad ?? this.cantidad,
+      precio: precio ?? this.precio,
+      total: total ?? this.total,
+      orden: orden ?? this.orden,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt,
+    );
+  }
 }

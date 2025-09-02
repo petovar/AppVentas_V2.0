@@ -22,7 +22,7 @@ class ClienteProvider extends ChangeNotifier {
       version: 2,
     );
     if (kDebugMode) {
-      print("Ya inicilizo la bd de clientes");
+      //print("Ya inicilizo la bd de clientes");
     }
   }
 
