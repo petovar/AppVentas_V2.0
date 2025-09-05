@@ -1,26 +1,91 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:app_ventas/src/presentation/pages/facturas_page.dart';
 import 'package:app_ventas/src/presentation/pages/productos_page.dart';
 import 'package:app_ventas/src/presentation/pages/ventas_sumary_page.dart';
 
+import '../../customs/constants.dart';
 import 'clientes_page.dart';
 import 'compras_page.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/round_button.dart';
+// import '../widgets/round_button.dart';
 import 'prov_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // Variable de estado para controlar la visibilidad del indicador de carga.
+  bool _isLoading = false;
+
+  // // Método para manejar la navegación y el estado de carga.
+  // Future<void> _navigateToPage(BuildContext context, Widget page) async {
+  //   // 1. Activar el estado de carga para mostrar el indicador.
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+
+  //   // 2. Esperar a que la navegación a la nueva página se complete.
+  //   await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => page),
+  //   );
+
+  //   // 3. Desactivar el estado de carga una vez que la nueva página está lista.
+  //   if (mounted) {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
+
+  Future<void> _navigateToRoute(BuildContext context, String route) async {
+    // 1. Activar el estado de carga para mostrar el indicador.
+    setState(() {
+      _isLoading = true;
+    });
+
+    // 2. Esperar a que la navegación a la nueva página se complete.
+    await Navigator.pushNamed(context, route);
+
+    // 3. Desactivar el estado de carga una vez que la nueva página está lista.
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     String appVersion = '1.0';
     return Scaffold(
-      appBar: AppBar(title: Text("Mi negocio")),
+      appBar: AppBar(
+        title: Text(Constants.nameEmpresa, style: TextStyle(fontSize: 15.0)),
+      ),
       drawer: _getDrawer(context, appVersion),
-      body: Stack(children: [_fondoApp(), _crearBotones(context)]),
+      body: Stack(
+        children: [
+          _fondoApp(),
+          _crearBotones(context),
+          // El indicador de carga, solo visible si _isLoading es verdadero.
+          if (_isLoading)
+            Container(
+              color: Colors.black.withValues(
+                alpha: 0.5,
+              ), // Fondo semi-transparente
+              child: const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -74,61 +139,183 @@ class HomePage extends StatelessWidget {
       children: [
         TableRow(
           children: [
-            RoundedButton(
-              color: Colors.white,
-              icon: Icons.shopping_cart_checkout,
-              texto: 'Ventas',
+            _buildRoudedButton(
+              context,
+              icon: Icons.people,
+              label: 'Ventas',
               route: '/ventas',
-              context: context,
+              color: Colors.white,
               enabledBoton: true,
             ),
-            RoundedButton(
-              color: Colors.white,
+            // RoundedButton(
+            //   color: Colors.white,
+            //   icon: Icons.shopping_cart_checkout,
+            //   texto: 'Ventas',
+            //   route: '/ventas',
+            //   context: context,
+            //   enabledBoton: true,
+            // ),
+            _buildRoudedButton(
+              context,
               icon: Icons.category_outlined,
-              texto: 'Inventario',
+              label: 'Inventario',
               route: '/inventario',
-              context: context,
-              enabledBoton: true,
-            ),
-            RoundedButton(
               color: Colors.white,
-              icon: Icons.person_3,
-              texto: 'Clientes',
-              route: '/clientes',
-              context: context,
               enabledBoton: true,
             ),
+
+            // RoundedButton(
+            //   color: Colors.white,
+            //   icon: Icons.category_outlined,
+            //   texto: 'Inventario',
+            //   route: '/inventario',
+            //   context: context,
+            //   enabledBoton: true,
+            // ),
+            _buildRoudedButton(
+              context,
+              icon: Icons.person_3,
+              label: 'Clientes',
+              route: '/clientes',
+              color: Colors.white,
+              enabledBoton: true,
+            ),
+
+            // RoundedButton(
+            //   color: Colors.white,
+            //   icon: Icons.person_3,
+            //   texto: 'Clientes',
+            //   route: '/clientes',
+            //   context: context,
+            //   enabledBoton: true,
+            // ),
           ],
         ),
         TableRow(
           children: [
-            RoundedButton(
-              color: Colors.white,
+            _buildRoudedButton(
+              context,
               icon: Icons.receipt,
-              texto: 'Resumen Ventas',
+              label: 'Resumen de\n    Ventas',
               route: '/ResumenVentas',
-              context: context,
+              color: Colors.white,
               enabledBoton: true,
             ),
-            RoundedButton(
-              color: Colors.white,
+
+            // RoundedButton(
+            //   color: Colors.white,
+            //   icon: Icons.receipt,
+            //   texto: 'Resumen de\n    Ventas',
+            //   route: '/ResumenVentas',
+            //   context: context,
+            //   enabledBoton: true,
+            // ),
+            _buildRoudedButton(
+              context,
               icon: Icons.add_shopping_cart_outlined,
-              texto: 'Compras',
+              label: 'Compras',
               route: '/compras',
-              context: context,
-              enabledBoton: true,
-            ),
-            RoundedButton(
               color: Colors.white,
-              icon: Icons.person_4,
-              texto: 'Provedores',
-              route: '/proveedores',
-              context: context,
-              enabledBoton: true,
+              enabledBoton: false,
             ),
+
+            // RoundedButton(
+            //   color: Colors.white,
+            //   icon: Icons.add_shopping_cart_outlined,
+            //   texto: 'Compras',
+            //   route: '/compras',
+            //   context: context,
+            //   enabledBoton: false,
+            // ),
+            _buildRoudedButton(
+              context,
+              icon: Icons.person_4,
+              label: 'Provedores',
+              route: '/proveedores',
+              color: Colors.white,
+              enabledBoton: false,
+            ),
+
+            // RoundedButton(
+            //   color: Colors.white,
+            //   icon: Icons.person_4,
+            //   texto: 'Provedores',
+            //   route: '/proveedores',
+            //   context: context,
+            //   enabledBoton: false,
+            // ),
           ],
         ),
       ],
+    );
+  }
+
+  // Widget _buildFeatureButton(
+  //   BuildContext context, {
+  //   required IconData icon,
+  //   required String label,
+  //   required Widget page,
+  // }) {
+  //   return ElevatedButton.icon(
+  //     icon: Icon(icon, size: 30),
+  //     label: Text(label, style: const TextStyle(fontSize: 18)),
+  //     style: ElevatedButton.styleFrom(
+  //       padding: const EdgeInsets.symmetric(vertical: 16),
+  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+  //     ),
+  //     onPressed:
+  //         () => _navigateToPage(
+  //           context,
+  //           page,
+  //         ), // Usa el nuevo método de navegación
+  //   );
+  // }
+
+  Widget _buildRoudedButton(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required String route,
+    required Color color,
+    required bool enabledBoton,
+  }) {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
+      child: InkWell(
+        onTap: enabledBoton ? () => _navigateToRoute(context, route) : null,
+        child: Container(
+          height: 110,
+          margin: EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(62, 67, 107, enabledBoton ? 0.6 : 0.3),
+            borderRadius: BorderRadius.circular(20.0),
+            border: Border.all(
+              width: 2.0,
+              color: const Color.fromARGB(255, 201, 196, 196),
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(height: 8.0),
+              CircleAvatar(
+                backgroundColor: Colors.transparent,
+                radius: 25.0,
+                child: Icon(icon, color: Colors.white, size: 32.0),
+              ),
+              Text(
+                label,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 12.0,
+                ),
+              ),
+              SizedBox(height: 8.0),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -145,8 +332,8 @@ Drawer _getDrawer(BuildContext context, String version) {
         const DrawerHeader(
           decoration: BoxDecoration(color: Color.fromARGB(255, 73, 70, 70)),
           child: Text(
-            'Mi negocio',
-            style: TextStyle(color: Colors.white, fontSize: 25.0),
+            Constants.nameEmpresa,
+            style: TextStyle(color: Colors.white, fontSize: 20.0),
           ),
         ),
         ListTile(
@@ -233,7 +420,6 @@ Drawer _getDrawer(BuildContext context, String version) {
             });
           },
         ),
-        Flexible(flex: 1, child: SizedBox(height: 100)),
         const Divider(), // Línea divisoria
         Padding(
           padding: const EdgeInsets.all(16.0),

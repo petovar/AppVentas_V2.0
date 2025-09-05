@@ -84,7 +84,7 @@ class RoundedButton extends StatelessWidget {
       child: InkWell(
         onTap: enabledBoton ? () => Navigator.pushNamed(context, route) : null,
         child: Container(
-          height: 100,
+          height: 110,
           margin: EdgeInsets.all(10.0),
           decoration: BoxDecoration(
             color: Color.fromRGBO(62, 67, 107, enabledBoton ? 0.6 : 0.3),

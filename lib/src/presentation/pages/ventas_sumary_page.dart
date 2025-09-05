@@ -1,7 +1,9 @@
 import 'package:app_ventas/src/customs/constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/factura_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class VentasSummaryPage extends StatefulWidget {
   const VentasSummaryPage({super.key});
@@ -91,19 +93,25 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
   void _shareSummary(BuildContext context, String summaryText) {
     // En un entorno real, usarías un paquete como `share_plus` o `url_launcher`.
     // Por ahora, solo mostraremos un mensaje en la consola.
-    print('Simulando compartir el resumen...');
-    print('Contenido a compartir:\n$summaryText');
+    if (kDebugMode) {
+      print('Simulando compartir el resumen...');
+      print('Contenido a compartir:\n$summaryText');
+    }
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Resumen listo para compartir.')),
     );
+
+    SharePlus.instance.share(ShareParams(text: summaryText));
   }
 
   // Lógica para simular la impresión
   void _printSummary(BuildContext context, String summaryText) {
     // En un entorno real, se usaría un paquete de impresión para impresoras térmicas.
     // Aquí, solo mostraremos un mensaje en la consola.
-    print('Simulando impresión del resumen...');
-    print('Contenido a imprimir:\n$summaryText');
+    if (kDebugMode) {
+      print('Simulando impresión del resumen...');
+      print('Contenido a imprimir:\n$summaryText');
+    }
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Comando de impresión enviado.')),
     );
@@ -132,7 +140,10 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
     return Scaffold(
       backgroundColor: Constants.colorBackgroundScafold,
       appBar: AppBar(
-        title: const Text('Resumen de Ventas'),
+        title: const Text(
+          'Resumen de Ventas',
+          style: TextStyle(fontSize: 19.0),
+        ),
         // backgroundColor: Colors.teal,
         actions: [
           FutureBuilder<Map<String, dynamic>>(
@@ -152,13 +163,13 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
                             ? () => _shareSummary(context, summaryText)
                             : null,
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.print, color: Colors.white),
-                    onPressed:
-                        snapshot.connectionState == ConnectionState.done
-                            ? () => _printSummary(context, summaryText)
-                            : null,
-                  ),
+                  // IconButton(
+                  //   icon: const Icon(Icons.print, color: Colors.white),
+                  //   onPressed:
+                  //       snapshot.connectionState == ConnectionState.done
+                  //           ? () => _printSummary(context, summaryText)
+                  //           : null,
+                  // ),
                 ],
               );
             },
@@ -452,7 +463,8 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
                                         ),
                                       ),
                                       Text(
-                                        '${(product['total_cantidad'] as double).toStringAsFixed(0)}',
+                                        (product['total_cantidad'] as double)
+                                            .toStringAsFixed(0),
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),

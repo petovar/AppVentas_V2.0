@@ -44,14 +44,13 @@ class _LoadingWidget extends StatelessWidget {
   final double? loadingWidth;
 
   const _LoadingWidget({
-    Key? key,
     this.widget,
     this.color,
     this.barrierColor,
     this.gifOrImagePath,
     required this.barrierDismissible,
     this.loadingWidth,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

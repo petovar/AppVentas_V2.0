@@ -1,8 +1,10 @@
 import 'package:app_ventas/src/customs/constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../models/cliente_model.dart';
 import '../../models/detalleventa_model.dart';
@@ -169,9 +171,11 @@ class _FacturaPageState extends State<FacturaPage> {
 
     // Simular la impresión: en una app real, aquí usarías un paquete de impresora
     // y enviarías la cadena de texto o un formato específico.
-    print('---------------- INICIANDO IMPRESIÓN DEL RECIBO ----------------');
-    print(receiptContent);
-    print('---------------- FIN DE LA IMPRESIÓN ----------------');
+    if (kDebugMode) {
+      print('---------------- INICIANDO IMPRESIÓN DEL RECIBO ----------------');
+      print(receiptContent);
+      print('---------------- FIN DE LA IMPRESIÓN ----------------');
+    }
 
     // Mostrar un diálogo con el recibo
     showDialog(
@@ -201,12 +205,25 @@ class _FacturaPageState extends State<FacturaPage> {
             ),
           ),
           actions: [
-            TextButton(
+            IconButton(
+              onPressed: () {
+                SharePlus.instance.share(ShareParams(text: receiptContent));
+              },
+              icon: Icon(Icons.share),
+            ),
+            IconButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cerrar'),
+              icon: Icon(Icons.close),
             ),
+
+            // TextButton(
+            //   onPressed: () {
+            //     Navigator.of(context).pop();
+            //   },
+            //   child: const Text('Cerrar'),
+            // ),
           ],
         );
       },
@@ -218,44 +235,44 @@ class _FacturaPageState extends State<FacturaPage> {
     List<DetalleVenta> detalles,
     PagoVenta? pago,
   ) {
-    final format = NumberFormat.currency(locale: 'es_VE', symbol: 'Bs ');
+    final format = NumberFormat.currency(locale: 'es_VE', symbol: '\$');
     final now = DateTime.now();
 
-    String content = '       - NOMBRE DEL NEGOCIO -\n';
-    content += '    Dirección: Calle 123, Ciudad\n';
-    content += '    Fecha: ${DateFormat('dd-MM-yyyy').format(now)}\n';
-    content += '    Hora: ${DateFormat('hh:mm a').format(now)}\n';
-    content += '    ------------------------------\n';
-    content += '    FACTURA NRO. ${venta.idVenta.substring(0, 8)}\n';
-    content += '    Cliente: ${venta.nombre}\n';
-    content += '    Condición: ${venta.condicion}\n';
-    content += '    ------------------------------\n';
-    content += '    PRODUCTOS\n';
-    content += '    ------------------------------\n';
+    String content = '${Constants.nameEmpresa}\n';
+    content += 'Dirección: Altagracia de Oco.\n';
+    content += 'Fecha: ${DateFormat('dd-MM-yyyy').format(now)}\n';
+    content += 'Hora: ${DateFormat('hh:mm a').format(now)}\n';
+    content += '------------------------------\n';
+    content += 'TICKET No. ${venta.idVenta.substring(0, 8)}\n';
+    content += 'Cliente: ${venta.nombre}\n';
+    content += 'Condición: ${venta.condicion}\n';
+    content += '------------------------------\n';
+    content += '         PRODUCTOS\n';
+    content += '------------------------------\n';
 
     double subtotal = 0.0;
     for (var detalle in detalles) {
       content +=
-          '    ${detalle.descripcion} x${detalle.cantidad.toStringAsFixed(0)}\n';
+          '${detalle.cantidad.toStringAsFixed(0)} x ${format.format(detalle.precio)} \n';
       content +=
-          '    ${format.format(detalle.precio)} = ${format.format(detalle.total)}\n';
+          '${detalle.descripcion} .... ${format.format(detalle.total)}\n';
       subtotal += detalle.total;
     }
 
-    content += '    ------------------------------\n';
-    content += '    SUBTOTAL: ${format.format(subtotal)}\n';
+    content += '------------------------------\n';
+    content += 'SUBTOTAL: ${format.format(subtotal)}\n';
     content +=
-        '    TOTAL:    ${format.format(subtotal)}\n'; // Asumimos 0% de IVA por ahora
-    content += '    ------------------------------\n';
+        'TOTAL:    ${format.format(subtotal)}\n'; // Asumimos 0% de IVA por ahora
+    content += '------------------------------\n';
     if (pago != null) {
-      content += '    Método de Pago: ${pago.metodoPago}\n';
-      content += '    Monto Pagado: ${format.format(pago.montoPago)}\n';
+      content += 'Método de Pago: ${pago.metodoPago}\n';
+      content += 'Monto Pagado: ${format.format(pago.montoPago)}\n';
     } else {
-      content += '    Monto a Pagar: ${format.format(subtotal)}\n';
+      content += 'Monto a Pagar: ${format.format(subtotal)}\n';
     }
-    content += '    ------------------------------\n';
-    content += '          ¡GRACIAS POR SU COMPRA!\n';
-    content += '    ------------------------------\n';
+    content += '------------------------------\n';
+    content += '     ¡GRACIAS POR SU COMPRA!\n';
+    content += '------------------------------\n';
 
     return content;
   }
@@ -316,7 +333,7 @@ class _FacturaPageState extends State<FacturaPage> {
     return Scaffold(
       backgroundColor: Constants.colorBackgroundScafold,
       appBar: AppBar(
-        title: const Text('Nueva Factura'),
+        title: const Text('Nueva Venta'),
         // backgroundColor: Colors.teal,
       ),
       body: SingleChildScrollView(
