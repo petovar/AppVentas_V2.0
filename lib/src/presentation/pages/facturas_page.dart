@@ -192,10 +192,7 @@ class _FacturaPageState extends State<FacturaPage> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Contenido del recibo (simulado):',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
+                // const Text('Contenido del recibo (simulado):',style: TextStyle(fontStyle: FontStyle.italic),),
                 const Divider(),
                 Text(
                   receiptContent,
@@ -239,6 +236,7 @@ class _FacturaPageState extends State<FacturaPage> {
     final now = DateTime.now();
 
     String content = '${Constants.nameEmpresa}\n';
+    content += '-------------- o ---------------\n';
     content += 'Dirección: Altagracia de Oco.\n';
     content += 'Fecha: ${DateFormat('dd-MM-yyyy').format(now)}\n';
     content += 'Hora: ${DateFormat('hh:mm a').format(now)}\n';

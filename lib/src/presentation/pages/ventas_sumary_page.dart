@@ -46,7 +46,7 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
 
   // Genera un resumen de ventas en formato de texto para compartir
   String _generateSummaryText(Map<String, dynamic> summary) {
-    String summaryText = "";
+    String summaryText = '';
     if (summary.isNotEmpty) {
       final totalVentas = summary['total_ventas'] as double;
       final numFacturas = summary['num_facturas'] as int;
@@ -55,8 +55,9 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
       final paymentsByMethod =
           summary['payments_by_method'] as Map<String, dynamic>;
       final topProducts = summary['top_products'] as List<Map<String, dynamic>>;
-
-      summaryText = 'Resumen de Ventas:\n\n';
+      summaryText = '${Constants.nameEmpresa}\n';
+      summaryText += '-------------- o ---------------\n\n';
+      summaryText += 'Resumen de Ventas:\n\n';
       summaryText += 'Total de Ventas: \$${totalVentas.toStringAsFixed(2)}\n';
       summaryText += 'Facturas Emitidas: $numFacturas\n\n';
 
@@ -105,17 +106,17 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
   }
 
   // Lógica para simular la impresión
-  void _printSummary(BuildContext context, String summaryText) {
-    // En un entorno real, se usaría un paquete de impresión para impresoras térmicas.
-    // Aquí, solo mostraremos un mensaje en la consola.
-    if (kDebugMode) {
-      print('Simulando impresión del resumen...');
-      print('Contenido a imprimir:\n$summaryText');
-    }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Comando de impresión enviado.')),
-    );
-  }
+  // void _printSummary(BuildContext context, String summaryText) {
+  //   // En un entorno real, se usaría un paquete de impresión para impresoras térmicas.
+  //   // Aquí, solo mostraremos un mensaje en la consola.
+  //   if (kDebugMode) {
+  //     print('Simulando impresión del resumen...');
+  //     print('Contenido a imprimir:\n$summaryText');
+  //   }
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(content: Text('Comando de impresión enviado.')),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,12 +1,9 @@
 import 'package:app_ventas/src/customs/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// import '../../customs/constants.dart' show Constants;
 import '../../models/producto_model.dart' show Producto;
 import '../../providers/producto_provider.dart';
 
-// Definimos la página principal de productos como un StatefulWidget
-// Definimos la página principal de productos como un StatefulWidget
 class ProductosPage extends StatefulWidget {
   const ProductosPage({super.key});
 
@@ -238,11 +235,12 @@ class _ProductosPageState extends State<ProductosPage> {
             bool isButtonDisabled = idController.text.isEmpty || idExists;
 
             return AlertDialog(
-              title: const Text('Agregar Nuevo Producto'),
+              title: const Text('Agregar Producto'),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    const SizedBox(height: 5),
                     TextField(
                       controller: idController,
                       decoration: InputDecoration(
@@ -382,6 +380,7 @@ class _ProductosPageState extends State<ProductosPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                const SizedBox(height: 5),
                 TextField(
                   controller: idController,
                   decoration: const InputDecoration(

@@ -10,7 +10,6 @@ import 'clientes_page.dart';
 import 'compras_page.dart';
 import 'package:flutter/material.dart';
 
-// import '../widgets/round_button.dart';
 import 'prov_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -147,14 +146,6 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
               enabledBoton: true,
             ),
-            // RoundedButton(
-            //   color: Colors.white,
-            //   icon: Icons.shopping_cart_checkout,
-            //   texto: 'Ventas',
-            //   route: '/ventas',
-            //   context: context,
-            //   enabledBoton: true,
-            // ),
             _buildRoudedButton(
               context,
               icon: Icons.category_outlined,
@@ -163,15 +154,6 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
               enabledBoton: true,
             ),
-
-            // RoundedButton(
-            //   color: Colors.white,
-            //   icon: Icons.category_outlined,
-            //   texto: 'Inventario',
-            //   route: '/inventario',
-            //   context: context,
-            //   enabledBoton: true,
-            // ),
             _buildRoudedButton(
               context,
               icon: Icons.person_3,
@@ -180,15 +162,6 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
               enabledBoton: true,
             ),
-
-            // RoundedButton(
-            //   color: Colors.white,
-            //   icon: Icons.person_3,
-            //   texto: 'Clientes',
-            //   route: '/clientes',
-            //   context: context,
-            //   enabledBoton: true,
-            // ),
           ],
         ),
         TableRow(
@@ -201,15 +174,6 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
               enabledBoton: true,
             ),
-
-            // RoundedButton(
-            //   color: Colors.white,
-            //   icon: Icons.receipt,
-            //   texto: 'Resumen de\n    Ventas',
-            //   route: '/ResumenVentas',
-            //   context: context,
-            //   enabledBoton: true,
-            // ),
             _buildRoudedButton(
               context,
               icon: Icons.add_shopping_cart_outlined,
@@ -218,15 +182,6 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
               enabledBoton: false,
             ),
-
-            // RoundedButton(
-            //   color: Colors.white,
-            //   icon: Icons.add_shopping_cart_outlined,
-            //   texto: 'Compras',
-            //   route: '/compras',
-            //   context: context,
-            //   enabledBoton: false,
-            // ),
             _buildRoudedButton(
               context,
               icon: Icons.person_4,
@@ -235,41 +190,11 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
               enabledBoton: false,
             ),
-
-            // RoundedButton(
-            //   color: Colors.white,
-            //   icon: Icons.person_4,
-            //   texto: 'Provedores',
-            //   route: '/proveedores',
-            //   context: context,
-            //   enabledBoton: false,
-            // ),
           ],
         ),
       ],
     );
   }
-
-  // Widget _buildFeatureButton(
-  //   BuildContext context, {
-  //   required IconData icon,
-  //   required String label,
-  //   required Widget page,
-  // }) {
-  //   return ElevatedButton.icon(
-  //     icon: Icon(icon, size: 30),
-  //     label: Text(label, style: const TextStyle(fontSize: 18)),
-  //     style: ElevatedButton.styleFrom(
-  //       padding: const EdgeInsets.symmetric(vertical: 16),
-  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-  //     ),
-  //     onPressed:
-  //         () => _navigateToPage(
-  //           context,
-  //           page,
-  //         ), // Usa el nuevo método de navegación
-  //   );
-  // }
 
   Widget _buildRoudedButton(
     BuildContext context, {
