@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 
 import 'presentation/pages/clientes_page.dart';
 import 'presentation/pages/compras_page.dart';
+// import 'presentation/pages/invoice_list_page.dart' show InvoiceListPage;
+import 'presentation/pages/list_facturas_page.dart' show ListFacturasPage;
 import 'presentation/pages/prov_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -75,6 +77,7 @@ class App extends StatelessWidget {
                 '/ventas': (BuildContext context) => FacturaPage(),
                 '/clientes': (BuildContext context) => ClientesPage(),
                 '/ResumenVentas': (BuildContext context) => VentasSummaryPage(),
+                '/ListFacturas': (BuildContext context) => ListFacturasPage(),
                 '/compras': (BuildContext context) => ComprasPage(),
                 '/proveedores': (BuildContext context) => ProveedoresPage(),
               },

@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    String appVersion = '1.0';
+    String appVersion = '2.0';
     return Scaffold(
       appBar: AppBar(
         title: Text(Constants.nameEmpresa, style: TextStyle(fontSize: 15.0)),
@@ -176,11 +176,11 @@ class _HomePageState extends State<HomePage> {
             ),
             _buildRoudedButton(
               context,
-              icon: Icons.add_shopping_cart_outlined,
-              label: 'Compras',
-              route: '/compras',
+              icon: Icons.list, //Icons.add_shopping_cart_outlined,
+              label: 'Listado de\n   Ventas',
+              route: '/ListFacturas',
               color: Colors.white,
-              enabledBoton: false,
+              enabledBoton: true,
             ),
             _buildRoudedButton(
               context,

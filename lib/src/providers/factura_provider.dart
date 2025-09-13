@@ -8,6 +8,9 @@ import '../models/venta_model.dart';
 class FacturaProvider extends ChangeNotifier {
   late Database _database;
 
+  List<Venta> _facturas = [];
+  List<Venta> get facturas => _facturas;
+
   Future<void> initializeDatabase() async {
     _database = await openDatabase(
       join(await getDatabasesPath(), 'ventas_database.db'),
@@ -67,6 +70,20 @@ class FacturaProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> loadFacturas() async {
+    await initializeDatabase();
+    // final List<Map<String, dynamic>> maps = await _database.query(
+    //   'master_ventas',
+    // );
+    final List<Map<String, dynamic>> maps = await _database.rawQuery(
+      'Select * from master_ventas order by fecha DESC',
+    );
+    _facturas = List.generate(maps.length, (i) {
+      return Venta.fromMap(maps[i]);
+    });
+    notifyListeners();
+  }
+
   // Nuevo método para obtener una venta y sus detalles
   Future<Map<String, dynamic>> getFacturaWithDetails(String idVenta) async {
     await initializeDatabase();
@@ -76,13 +93,14 @@ class FacturaProvider extends ChangeNotifier {
       whereArgs: [idVenta],
     );
     if (masterMaps.isEmpty) return {};
-
     final venta = Venta.fromMap(masterMaps.first);
+
     final List<Map<String, dynamic>> slaveMaps = await _database.query(
       'slave_ventas',
       where: 'id_venta = ?',
       whereArgs: [idVenta],
     );
+
     final detalles = List.generate(slaveMaps.length, (i) {
       return DetalleVenta.fromMap(slaveMaps[i]);
     });

@@ -15,9 +15,16 @@ class ClienteProvider extends ChangeNotifier {
     _database = await openDatabase(
       join(await getDatabasesPath(), 'clientes_database.db'),
       onCreate: (db, version) {
-        return db.execute(
-          "CREATE TABLE clientes(mIdx TEXT PRIMARY KEY, mName TEXT, mAlias TEXT, mTelefono TEXT, mEmail TEXT, mDireccion TEXT, mCreatedAt TEXT, mUpdatedAt TEXT)",
-        );
+        return db.execute('''
+          CREATE TABLE clientes(
+            mIdx TEXT PRIMARY KEY, 
+            mName TEXT, 
+            mAlias TEXT, 
+            mTelefono TEXT, 
+            mEmail TEXT, 
+            mDireccion TEXT, 
+            mCreatedAt TEXT, 
+            mUpdatedAt TEXT)''');
       },
       version: 2,
     );

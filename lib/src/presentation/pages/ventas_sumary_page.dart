@@ -1,4 +1,5 @@
 import 'package:app_ventas/src/customs/constants.dart';
+import 'package:app_ventas/src/providers/producto_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +46,10 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
   }
 
   // Genera un resumen de ventas en formato de texto para compartir
-  String _generateSummaryText(Map<String, dynamic> summary) {
+  String _generateSummaryText(
+    Map<String, dynamic> summary,
+    List<Map<String, dynamic>> productStock,
+  ) {
     String summaryText = '';
     if (summary.isNotEmpty) {
       final totalVentas = summary['total_ventas'] as double;
@@ -83,7 +87,17 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
       } else {
         for (var product in topProducts) {
           summaryText +=
-              '- ${product['descripcion']}: ${(product['total_cantidad'] as double).toStringAsFixed(0)}\n';
+              '- ${product['descripcion']}: ${(product['total_cantidad'] as double).toStringAsFixed(2)}\n';
+        }
+      }
+      summaryText += '\n\n';
+      summaryText += 'Inventario Actual:\n';
+      if (topProducts.isEmpty) {
+        summaryText += 'No hay productos en inventario.';
+      } else {
+        for (var product in productStock) {
+          summaryText +=
+              '- ${product['descripcion']} (${product['unidad']})  ${(product['existencia'] as num).toStringAsFixed(2)} en stock\n';
         }
       }
     }
@@ -124,7 +138,11 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
       context,
       listen: false,
     );
-
+    final productoProvider = Provider.of<ProductoProvider>(
+      context,
+      listen: false,
+    );
+    dynamic summaryText;
     // Convertir el `endDate` a la medianoche para incluir todo el día en el filtro
     final adjustedEndDate =
         _endDate != null
@@ -137,7 +155,7 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
               59,
             )
             : null;
-
+    // final List productStock = [];
     return Scaffold(
       backgroundColor: Constants.colorBackgroundScafold,
       appBar: AppBar(
@@ -147,34 +165,45 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
         ),
         // backgroundColor: Colors.teal,
         actions: [
-          FutureBuilder<Map<String, dynamic>>(
-            future: facturaProvider.getSalesSummary(
-              startDate: _startDate,
-              endDate: adjustedEndDate,
-            ),
-            builder: (context, snapshot) {
-              final summaryData = snapshot.data ?? {};
-              final summaryText = _generateSummaryText(summaryData);
-              return Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.share, color: Colors.white),
-                    onPressed:
-                        snapshot.connectionState == ConnectionState.done
-                            ? () => _shareSummary(context, summaryText)
-                            : null,
-                  ),
-                  // IconButton(
-                  //   icon: const Icon(Icons.print, color: Colors.white),
-                  //   onPressed:
-                  //       snapshot.connectionState == ConnectionState.done
-                  //           ? () => _printSummary(context, summaryText)
-                  //           : null,
-                  // ),
-                ],
-              );
-            },
+          //   FutureBuilder<List<dynamic>>(
+          //     future: Future.wait([
+          //       facturaProvider.getSalesSummary(
+          //         startDate: _startDate,
+          //         endDate: adjustedEndDate,
+          //       ),
+          //       productoProvider.getProductStock(),
+          //     ]),
+          //     builder: (context, snapshot) {
+          //       if (context.mounted) {
+          //         final summaryData = snapshot.data![0];
+          //         final productStock =
+          //             snapshot.data![1] as List<Map<String, dynamic>>;
+          //         final summaryText = _generateSummaryText(summaryData);
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.share, color: Colors.white),
+                onPressed: () {
+                  _shareSummary(context, summaryText);
+                },
+                //                   snapshot.connectionState == ConnectionState.done
+                //                       ? () => _shareSummary(context, summaryText)
+                //                       : null,
+              ),
+              IconButton(
+                icon: const Icon(Icons.print, color: Colors.white),
+                onPressed: () {},
+                //             //       snapshot.connectionState == ConnectionState.done
+                //             //           ? () => _printSummary(context, summaryText)
+                //             //           : null,
+              ),
+            ],
           ),
+          //       } else {
+          //         return Container();
+          //       }
+          //     },
+          //   ),
         ],
       ),
       body: Column(
@@ -205,19 +234,20 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
             ),
           ),
           Expanded(
-            child: FutureBuilder<Map<String, dynamic>>(
-              future: facturaProvider.getSalesSummary(
-                startDate: _startDate,
-                endDate: adjustedEndDate,
-              ),
+            child: FutureBuilder<List<dynamic>>(
+              future: Future.wait([
+                facturaProvider.getSalesSummary(
+                  startDate: _startDate,
+                  endDate: adjustedEndDate,
+                ),
+                productoProvider.getProductStock(),
+              ]),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData ||
-                    snapshot.data!.isEmpty ||
-                    snapshot.data!['total_ventas'] == 0.0) {
+                } else if (!snapshot.hasData || snapshot.data![0].isEmpty) {
                   return const Center(
                     child: Text(
                       'No hay datos de ventas para el período seleccionado.',
@@ -225,7 +255,7 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
                   );
                 }
 
-                final summary = snapshot.data!;
+                final summary = snapshot.data![0];
                 final totalVentas = summary['total_ventas'] as double;
                 final numFacturas = summary['num_facturas'] as int;
                 final salesByCondition =
@@ -238,6 +268,11 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
                   0.0,
                   (sum, item) => sum + (item as double),
                 );
+
+                final productStock =
+                    snapshot.data![1] as List<Map<String, dynamic>>;
+
+                summaryText = _generateSummaryText(summary, productStock);
 
                 return SingleChildScrollView(
                   padding: const EdgeInsets.all(16.0),
@@ -465,7 +500,64 @@ class _VentasSummaryPageState extends State<VentasSummaryPage> {
                                       ),
                                       Text(
                                         (product['total_cantidad'] as double)
-                                            .toStringAsFixed(0),
+                                            .toStringAsFixed(2),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      // Tarjeta de Inventario Actual
+                      Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Inventario Actual',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              if (productStock.isEmpty)
+                                const Text('No hay productos en inventario.'),
+                              ...productStock.asMap().entries.map((entry) {
+                                int index = entry.key;
+                                var product = entry.value;
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4.0,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '${index + 1}.',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          '${product['descripcion']} (${product['unidad']})',
+                                        ),
+                                      ),
+                                      Text(
+                                        '${(product['existencia'] as num).toStringAsFixed(2)} en stock',
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
