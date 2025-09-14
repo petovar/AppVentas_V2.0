@@ -105,7 +105,19 @@ class FacturaProvider extends ChangeNotifier {
       return DetalleVenta.fromMap(slaveMaps[i]);
     });
 
-    return {'venta': venta, 'detalles': detalles};
+    PagoVenta? pago;
+
+    final List<Map<String, dynamic>> pagosVenta = await _database.query(
+      'pagos_ventas',
+      where: 'id_venta = ?',
+      whereArgs: [idVenta],
+    );
+
+    if (pagosVenta.isNotEmpty) {
+      pago = PagoVenta.fromMap(pagosVenta.first);
+    }
+
+    return {'venta': venta, 'detalles': detalles, 'pago': pago};
   }
 
   // Nuevo método para obtener un resumen de ventas

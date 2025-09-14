@@ -2,12 +2,14 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:app_ventas/src/presentation/pages/facturas_page.dart';
+import 'package:app_ventas/src/presentation/pages/list_facturas_page.dart'
+    show ListFacturasPage;
 import 'package:app_ventas/src/presentation/pages/productos_page.dart';
 import 'package:app_ventas/src/presentation/pages/ventas_sumary_page.dart';
 
 import '../../customs/constants.dart';
 import 'clientes_page.dart';
-import 'compras_page.dart';
+// import 'compras_page.dart';
 import 'package:flutter/material.dart';
 
 import 'prov_page.dart';
@@ -177,7 +179,7 @@ class _HomePageState extends State<HomePage> {
             _buildRoudedButton(
               context,
               icon: Icons.list, //Icons.add_shopping_cart_outlined,
-              label: 'Listado de\n   Ventas',
+              label: 'Búsqueda de\n     Ventas',
               route: '/ListFacturas',
               color: Colors.white,
               enabledBoton: true,
@@ -323,11 +325,11 @@ Drawer _getDrawer(BuildContext context, String version) {
         ),
         ListTile(
           leading: Icon(Icons.add_shopping_cart_outlined),
-          title: const Text('Compras'),
+          title: const Text('Búsqueda de Ventas'),
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ComprasPage()),
+              MaterialPageRoute(builder: (context) => const ListFacturasPage()),
             ).then((onValue) {
               if (context.mounted) Navigator.of(context).pop();
             });
