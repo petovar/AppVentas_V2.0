@@ -1,13 +1,16 @@
 import 'dart:math';
 import 'dart:ui';
 
+// import 'package:app_ventas/src/customs/loading.dart';
 import 'package:app_ventas/src/presentation/pages/facturas_page.dart';
 import 'package:app_ventas/src/presentation/pages/list_facturas_page.dart'
     show ListFacturasPage;
 import 'package:app_ventas/src/presentation/pages/productos_page.dart';
 import 'package:app_ventas/src/presentation/pages/ventas_sumary_page.dart';
+// import 'package:loading_indicator/loading_indicator.dart';
 
 import '../../customs/constants.dart';
+// import '../../customs/library.dart';
 import 'clientes_page.dart';
 // import 'compras_page.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +70,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     String appVersion = '2.0';
     return Scaffold(
+      backgroundColor: Constants.colorBackgroundScafold,
       appBar: AppBar(
         title: Text(Constants.nameEmpresa, style: TextStyle(fontSize: 15.0)),
       ),
@@ -79,7 +83,7 @@ class _HomePageState extends State<HomePage> {
           if (_isLoading)
             Container(
               color: Colors.black.withValues(
-                alpha: 0.5,
+                alpha: 0.6,
               ), // Fondo semi-transparente
               child: const Center(
                 child: CircularProgressIndicator(color: Colors.white),

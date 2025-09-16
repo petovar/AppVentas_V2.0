@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../customs/libreria.dart';
 import '../../models/cliente_model.dart';
 import '../../models/detalleventa_model.dart';
 import '../../models/pagoventa_model.dart';
@@ -170,7 +171,7 @@ class _FacturaPageState extends State<FacturaPage> {
     PagoVenta? pago,
   ) {
     // Generar el contenido del recibo en un formato de texto simple
-    final String receiptContent = _generateReceiptContent(
+    final String receiptContent = Libreria.generateReceiptContent(
       venta,
       detalles,
       pago,
@@ -203,8 +204,9 @@ class _FacturaPageState extends State<FacturaPage> {
                 const Divider(),
                 Text(
                   receiptContent,
-                  style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+                  style: const TextStyle(fontFamily: 'monospace', fontSize: 10),
                 ),
+                const Divider(),
               ],
             ),
           ),
@@ -227,53 +229,53 @@ class _FacturaPageState extends State<FacturaPage> {
     );
   }
 
-  String _generateReceiptContent(
-    Venta venta,
-    List<DetalleVenta> detalles,
-    PagoVenta? pago,
-  ) {
-    final format = NumberFormat.currency(locale: 'es_VE', symbol: '\$');
-    final now = DateTime.now();
+  // String _generateReceiptContent(
+  //   Venta venta,
+  //   List<DetalleVenta> detalles,
+  //   PagoVenta? pago,
+  // ) {
+  //   final format = NumberFormat.currency(locale: 'es_VE', symbol: '\$');
+  //   final now = DateTime.now();
 
-    String content = '${Constants.nameEmpresa}\n';
-    content += '-------------- o ---------------\n';
-    content += 'Dirección: Altagracia de Oco.\n';
-    content += 'Fecha: ${DateFormat('dd-MM-yyyy').format(now)}\n';
-    content += 'Hora: ${DateFormat('hh:mm a').format(now)}\n';
-    content += '------------------------------\n';
-    content += 'TICKET No. ${venta.idVenta.substring(0, 8)}\n';
-    content += 'Cliente: ${venta.nombre}\n';
-    content += 'Condición: ${venta.condicion}\n';
-    content += '------------------------------\n';
-    content += '         PRODUCTOS\n';
-    content += '------------------------------\n';
+  //   String content = '${Constants.nameEmpresa}\n';
+  //   content += '-------------- o ---------------\n';
+  //   content += 'Dirección: Altagracia de Oco.\n';
+  //   content += 'Fecha: ${DateFormat('dd-MM-yyyy').format(now)}\n';
+  //   content += 'Hora: ${DateFormat('hh:mm a').format(now)}\n';
+  //   content += '--------------------------------\n';
+  //   content += 'TICKET No. ${venta.idVenta.substring(0, 8)}\n';
+  //   content += 'Cliente: ${venta.nombre}\n';
+  //   content += 'Condición: ${venta.condicion}\n';
+  //   content += '--------------------------------\n';
+  //   content += '         PRODUCTOS\n';
+  //   content += '--------------------------------\n';
 
-    double subtotal = 0.0;
-    for (var detalle in detalles) {
-      content +=
-          '${detalle.cantidad.toStringAsFixed(0)} x ${format.format(detalle.precio)} \n';
-      content +=
-          '${detalle.descripcion} .... ${format.format(detalle.total)}\n';
-      subtotal += detalle.total;
-    }
+  //   double subtotal = 0.0;
+  //   for (var detalle in detalles) {
+  //     content +=
+  //         '${detalle.cantidad.toStringAsFixed(2)} x ${format.format(detalle.precio)} \n';
+  //     content +=
+  //         '${detalle.descripcion} .... ${format.format(detalle.total)}\n';
+  //     subtotal += detalle.total;
+  //   }
 
-    content += '------------------------------\n';
-    content += 'SUBTOTAL: ${format.format(subtotal)}\n';
-    content +=
-        'TOTAL:    ${format.format(subtotal)}\n'; // Asumimos 0% de IVA por ahora
-    content += '------------------------------\n';
-    if (pago != null) {
-      content += 'Método de Pago: ${pago.metodoPago}\n';
-      content += 'Monto Pagado: ${format.format(pago.montoPago)}\n';
-    } else {
-      content += 'Monto a Pagar: ${format.format(subtotal)}\n';
-    }
-    content += '------------------------------\n';
-    content += '     ¡GRACIAS POR SU COMPRA!\n';
-    content += '------------------------------\n';
+  //   content += '--------------------------------\n';
+  //   content += 'SUBTOTAL: ${format.format(subtotal)}\n';
+  //   content +=
+  //       'TOTAL:    ${format.format(subtotal)}\n'; // Asumimos 0% de IVA por ahora
+  //   content += '--------------------------------\n';
+  //   if (pago != null) {
+  //     content += 'Método de Pago: ${pago.metodoPago}\n';
+  //     content += 'Monto Pagado: ${format.format(pago.montoPago)}\n';
+  //   } else {
+  //     content += 'Monto a Pagar: ${format.format(subtotal)}\n';
+  //   }
+  //   content += '--------------------------------\n';
+  //   content += '     ¡GRACIAS POR SU COMPRA!\n';
+  //   content += '--------------------------------\n';
 
-    return content;
-  }
+  //   return content;
+  // }
 
   // Método para editar la cantidad de un producto existente
   void _editProductQuantity(int index) {

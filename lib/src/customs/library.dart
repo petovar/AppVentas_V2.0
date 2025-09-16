@@ -1,8 +1,13 @@
 // import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:uuid/uuid.dart';
 
+import '../models/detalleventa_model.dart';
+import '../models/pagoventa_model.dart';
+import '../models/venta_model.dart';
 import 'constants.dart';
 import 'loading.dart';
 import 'overlay_progress_loading.dart' show OverlayLoadingProgress;
@@ -44,28 +49,28 @@ showSnackBar(BuildContext context, String message) {
       );
 }
 
-// abstract class ProgressDialog {
-//   static show(BuildContext context) {
-//     showCupertinoModalPopup(
-//       context: context,
-//       builder: (_) {
-//         return PopScope(
-//           canPop: false,
-//           child: SizedBox(
-//             width: double.infinity,
-//             height: double.infinity,
-//             child: Center(child: CircularProgressIndicator()),
-//           ),
-//           //onWillPop: () async => false,
-//         );
-//       },
-//     );
-//   }
+abstract class ProgressDialog {
+  static show(BuildContext context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (_) {
+        return PopScope(
+          canPop: false,
+          child: SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            child: Center(child: CircularProgressIndicator()),
+          ),
+          //onWillPop: () async => false,
+        );
+      },
+    );
+  }
 
-//   static dissmiss(BuildContext context) {
-//     Navigator.pop(context);
-//   }
-// }
+  static dissmiss(BuildContext context) {
+    Navigator.pop(context);
+  }
+}
 
 progressDialogShow(BuildContext context) {
   FocusScope.of(context).requestFocus(FocusNode());

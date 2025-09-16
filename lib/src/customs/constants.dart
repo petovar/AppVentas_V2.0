@@ -6,6 +6,8 @@ import 'library.dart';
 class Constants {
   // Nombre de la empresa
   static const String nameEmpresa = "EXQUISITESES LA CANDELARIA, C.A.";
+  static const String dirEmpresa = "Altagracia de Orituco.";
+
   // dimensions
   static const double padding = 20;
   static const double radius = 50;
